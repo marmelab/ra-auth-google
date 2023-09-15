@@ -104,9 +104,7 @@ export default App;
 
 ![LoginPage](img/LoginPage.png)
 
-## Advanced Usage
-
-### Provide the Client ID via a prop
+## Providing Client ID Via Props
 
 You can also provide the client id via a prop instead of using the `.env` file.
 
@@ -143,7 +141,7 @@ const App = () => {
 export default App;
 ```
 
-### One Tap button
+## One Tap Button
 
 The `<OneTapButton>` component can be used to enable the [One Tap](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#one_tap) button on one or more pages.
 
@@ -152,20 +150,28 @@ The `<OneTapButton>` component can be used to enable the [One Tap](https://devel
 It can be used as a standalone component, or to wrap a page.
 
 ```tsx
-const Standalone = () => (
-  <div>
-    <OneTapButton />
-    <h1>My Page</h1>
-  </div>
-);
+import { initGoogleAuthProvider } from "ra-auth-google";
 
-const Wrapper = () => (
-  <OneTapButton>
+const Standalone = () => {
+  const { OneTapButton } = initGoogleAuthProvider();
+  return (
     <div>
+      <OneTapButton />
       <h1>My Page</h1>
     </div>
-  </OneTapButton>
-);
+  )
+};
+
+const Wrapper = () => {
+  const { OneTapButton } = initGoogleAuthProvider();
+  return (
+    <OneTapButton>
+      <div>
+        <h1>My Page</h1>
+      </div>
+    </OneTapButton>
+  )
+};
 ```
 
 Here is a full example enabling the One Tap button on a custom route:
@@ -213,7 +219,7 @@ const App = () => {
 export default App;
 ```
 
-### Customizing the Sign in with Google button
+## Customizing The Sign In With Google Button
 
 Google does not support using your own button to sign in. However, you can customize the button, using the [provided props](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#GsiButtonConfiguration), to better integrate it with your app.
 
@@ -257,7 +263,7 @@ const App = () => {
 export default App;
 ```
 
-### Automatic sign-in
+## Automatic Sign-In
 
 You can enable [Automatic sign-in](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#automatic_sign-in) by setting the [`auto_select`](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#auto_select) param to `true`:
 
@@ -306,7 +312,7 @@ const App = () => {
 export default App;
 ```
 
-### Configure the Google Identity Services library
+## Configuring The Google Identity Services Library
 
 `initGoogleAuthProvider` accepts all the [parameters](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) supported by the GIS library.
 
@@ -357,7 +363,7 @@ const App = () => {
 export default App;
 ```
 
-### Making authenticated requests to the API
+## Making Authenticated Requests To The API
 
 `ra-auth-google` includes an `httpClient` that can be used to make authenticated requests to your API. This helper automatically adds the credentials `token` to the request headers.
 
@@ -399,7 +405,7 @@ const App = () => {
 export default App;
 ```
 
-### Choosing how to store the token
+## Choosing The Token Storage Strategy
 
 By default, `ra-auth-google` will store the received token in **localStorage**, under the `"token"` key.
 

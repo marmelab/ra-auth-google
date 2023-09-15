@@ -409,7 +409,7 @@ export default App;
 
 By default, `ra-auth-google` will store the received token in **localStorage**, under the `"token"` key.
 
-You can choose how to store the token by providing a different `tokenStore`:
+If you want to store it somewhere else, or need to use a different key, you can provide your own `tokenStore`:
 
 ```tsx
 // in src/myTokenStore.tsx

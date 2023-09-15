@@ -6,6 +6,9 @@ help:
 install: ## Install all dependencies
 	yarn
 
+prepare-env: ## Initialize the environment variable file for the demo
+	@cp -n ./packages/demo-react-admin/.env.template ./packages/demo-react-admin/.env
+
 build-ra-auth-google:
 	@echo "Transpiling ra-auth-google files...";
 	@cd ./packages/ra-auth-google && yarn build

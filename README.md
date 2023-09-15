@@ -2,7 +2,7 @@
 
 An auth provider for [react-admin](https://github.com/marmelab/react-admin) that handles authentication using the [Google Identity Services (GIS)](https://developers.google.com/identity/gsi/web/guides/overview?hl=en).
 
-It allows to easily enable users to sign to your app in using their Google account, either personal, or professional via [Google Workspaces](https://workspace.google.com/).
+It allows to easily enable users to sign in to your app in using their Google account, either personal, or professional via [Google Workspaces](https://workspace.google.com/).
 
 This repository contains:
 
@@ -18,11 +18,16 @@ This repository contains:
 
 ### Prerequesites
 
+This demo requires:
+
+- node >= 16
+- yarn
+
 To enable Sign In With Google on your website, you first need to set up your **Google API client ID**.
 
-Please follow this [setup guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en) to get your Google API client ID and configure your OAuth Consent Screen.
+First, if necessary, [configure the OAuth consent screen](https://developers.google.com/workspace/guides/configure-oauth-consent?hl=en) for your project. If your project is still in Test mode, feel free to add some **test users**.
 
-If you choose to create a new Google APIs project in Test mode, feel free to add some **test users**.
+Then, follow this [setup guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid?hl=en) to get your Google API client ID.
 
 When prompted for the **Authorized JavaScript origins**, please add the following values:
 
@@ -38,13 +43,13 @@ git clone https://github.com/marmelab/ra-auth-google.git
 cd ra-auth-google
 ```
 
-Then, configure the demo app with your **Google API client ID**. Create a `.env` file in the root of the project.
+You need to configure the demo app with your **Google API client ID**. Run the following command to initialize the environment variable file:
 
 ```sh
-cp packages/demo-react-admin/.env.template packages/demo-react-admin/.env
+make prepare-env
 ```
 
-Fill in the client ID:
+In it, fill in the client ID:
 
 ```sh
 # In packages/demo-react-admin/.env

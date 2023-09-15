@@ -349,7 +349,7 @@ const App = () => {
 export default App;
 ```
 
-### `httpClient`
+### Making authenticated requests to the API
 
 `ra-auth-google` includes an `httpClient` that can be used to make authenticated requests to your API. This helper automatically adds the credentials `token` to the request headers.
 
@@ -447,6 +447,122 @@ const App = () => {
 export default App;
 ```
 
+## API
+
+### `initGoogleAuthProvider`
+
+Use `initGoogleAuthProvider` to create an [authProvider](#googleauthprovider), a [login button](#googleloginbutton), a [One Tap button](#googleonetapbutton) and an [`httpClient`](#googlehttpclient) from a single configuration object.
+
+```ts
+const { authProvider, LoginButton, OneTapButton, httpClient } = initGoogleAuthProvider();
+```
+
+It accepts the following parameters:
+
+-   `client_id`: *Optional* - The Google API client ID of your application. Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
+-   `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+-   Other parameters: *Optional* - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+
+```ts
+const { authProvider, LoginButton, OneTapButton, httpClient } = initGoogleAuthProvider({
+  client_id: "my-application-client-id.apps.googleusercontent.com",
+  context: "use",
+  tokenStore: myTokenStore,
+});
+```
+
+### `googleAuthProvider`
+
+Returns an authProvider that can be used with react-admin.
+
+It accepts the following parameters:
+
+-   `gsiParams`: **Required** - Parameters for the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+-   `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+
+```ts
+const authProvider = googleAuthProvider({
+  gsiParams: { 
+    client_id: "my-application-client-id.apps.googleusercontent.com",
+    ux_mode: "popup", 
+  },
+  tokenStore: myTokenStore,
+});
+```
+
+### `<GoogleLoginButton>`
+
+Returns a component that can be used to render the [Sign in with Google button](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#sign_in_with_google_button).
+
+It accepts the following props:
+
+-   `gsiParams`: **Required** - Parameters for the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+-   `sx`: *Optional* - Allows to customize the MUI `<Box>` inside which the button is rendered. See [MUI `sx` prop](https://mui.com/system/basics/#the-sx-prop) for more information.
+-   Other parameters: *Optional* - All the other parameters are passed to the Sign in with Google button, and allow for customization. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#GsiButtonConfiguration) for the full list of supported parameters.
+
+```tsx
+const LoginButton = () => (
+  <GoogleLoginButton 
+    gsiParams={{ 
+      client_id: "my-application-client-id.apps.googleusercontent.com"
+    }}
+    theme="filled_black"
+  />
+);
+```
+
+### `<GoogleOneTapButton>`
+
+The `<GoogleOneTapButton>` can be used either as a standalone component, or as a wrapper.
+
+The component itself doesn't render anything, but it triggers the Google API to display the One Tap prompt if the user is not yet signed in.
+
+Use it in the pages that you want to enable the One Tap feature on.
+
+```tsx
+const Standalone = () => (
+  <div>
+    <GoogleOneTapButton />
+    <h1>My Page</h1>
+  </div>
+);
+
+const Wrapper = () => (
+  <GoogleOneTapButton>
+    <div>
+      <h1>My Page</h1>
+    </div>
+  </GoogleOneTapButton>
+);
+```
+
+It supports the following props:
+
+-  `children`: *Optional* - The children to render. If provided, the component will be used as a wrapper.
+-  Other parameters: **Required** - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+
+```tsx
+const MyPage = () => (
+  <div>
+    <GoogleOneTapButton 
+      client_id="my-application-client-id.apps.googleusercontent.com" 
+    />
+    <h1>My Page</h1>
+  </div>
+);
+```
+
+### `googleHttpClient`
+
+Returns an `httpClient` that can be used to make authenticated requests to your API.
+
+It accepts the following parameters:
+
+-   `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+
+```ts
+const httpClient = googleHttpClient({ tokenStore: myTokenStore });
+```
 
 ## Demo
 

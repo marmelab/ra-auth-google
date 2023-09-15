@@ -1,17 +1,20 @@
 import { AuthProvider } from "react-admin";
 import jwt_decode from "jwt-decode";
 import { CredentialResponse, IdConfiguration, UserPayload } from "./types";
+import { TokenStore, localStorageTokenStore } from "./tokenStore";
 
 export const googleAuthProvider = ({
   gsiParams,
+  tokenStore = localStorageTokenStore,
 }: {
   gsiParams: Omit<IdConfiguration, "callback">;
+  tokenStore?: TokenStore;
 }): AuthProvider => {
   const authProvider = {
     async login(authResponse: CredentialResponse) {
       const token = authResponse?.credential;
       if (token) {
-        localStorage.setItem("token", token);
+        tokenStore.setToken(token);
         const user: UserPayload = jwt_decode(token);
         localStorage.setItem(
           "user",
@@ -32,10 +35,10 @@ export const googleAuthProvider = ({
     },
 
     async logout() {
-      const token = localStorage.getItem("token");
+      const token = tokenStore.getToken();
       if (token) {
         const user: UserPayload = jwt_decode(token);
-        localStorage.removeItem("token");
+        tokenStore.removeToken();
         localStorage.removeItem("user");
 
         window?.google?.accounts.id.initialize({
@@ -53,7 +56,7 @@ export const googleAuthProvider = ({
     },
 
     async checkAuth() {
-      if (!localStorage.getItem("token")) {
+      if (!tokenStore.getToken()) {
         throw { message: false };
       }
     },

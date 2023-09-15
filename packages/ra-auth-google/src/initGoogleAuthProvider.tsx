@@ -7,11 +7,13 @@ import {
 import { googleAuthProvider } from "./googleAuthProvider";
 import { googleHttpClient } from "./googleHttpClient";
 import { IdConfiguration } from "./types";
+import { TokenStore, localStorageTokenStore } from "./tokenStore";
 
 export const initGoogleAuthProvider = (
   params?: InitGoogleAuthProviderParams
 ) => {
   const {
+    tokenStore = localStorageTokenStore,
     ux_mode = "popup",
     client_id = process.env.GOOGLE_CLIENT_ID,
     ...rest
@@ -42,17 +44,21 @@ export const initGoogleAuthProvider = (
 
   const authProvider = googleAuthProvider({
     gsiParams: { ux_mode, client_id, ...rest },
+    tokenStore,
   });
+
+  const httpClient = googleHttpClient({ tokenStore });
 
   return {
     authProvider,
     LoginButton,
     OneTapButton,
-    httpClient: googleHttpClient,
+    httpClient,
   };
 };
 
 export interface InitGoogleAuthProviderParams
   extends Omit<IdConfiguration, "callback" | "client_id"> {
   client_id?: string;
+  tokenStore?: TokenStore;
 }

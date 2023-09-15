@@ -364,8 +364,62 @@ import { Admin, Login, Resource } from "react-admin";
 import posts from "./posts";
 
 const App = () => {
+  const { authProvider, LoginButton, httpClient } = initGoogleAuthProvider();
+
+  const dataProvider = jsonServerProvider(
+    "https://jsonplaceholder.typicode.com",
+    httpClient
+  );
+
+  const LoginPage = () => (
+    <Login>
+      <LoginButton />
+    </Login>
+  );
+
+  return (
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
+  );
+};
+export default App;
+```
+
+### Choosing how to store the token
+
+By default, `ra-auth-google` will store the received token in **localStorage**, under the `"token"` key.
+
+You can choose how to store the token by providing a different `tokenStore`:
+
+```tsx
+// in src/myTokenStore.tsx
+import { TokenStore } from "ra-auth-google";
+
+export const myTokenStore: TokenStore = {
+  getToken: () => localStorage.getItem("my_token"),
+  setToken: (token) => localStorage.setItem("my_token", token),
+  removeToken: () => localStorage.removeItem("my_token"),
+};
+```
+
+```tsx
+// in src/App.tsx
+import { initGoogleAuthProvider } from "ra-auth-google";
+import jsonServerProvider from "ra-data-json-server";
+import React from "react";
+import { Admin, Login, Resource } from "react-admin";
+import posts from "./posts";
+import { myTokenStore } from "./myTokenStore";
+
+const App = () => {
   const { authProvider, LoginButton, httpClient } = initGoogleAuthProvider({
-    auto_select: true,
+    tokenStore: myTokenStore,
   });
 
   const dataProvider = jsonServerProvider(

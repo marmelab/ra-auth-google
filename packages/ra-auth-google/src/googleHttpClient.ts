@@ -1,7 +1,12 @@
 import { fetchUtils, Options } from "react-admin";
+import { localStorageTokenStore, TokenStore } from "./tokenStore";
 
-export const googleHttpClient = async (url: string, options: Options = {}) => {
-  const token = localStorage.getItem("token");
+export const googleHttpClient = ({
+  tokenStore = localStorageTokenStore,
+}: {
+  tokenStore?: TokenStore;
+}) => async (url: string, options: Options = {}) => {
+  const token = tokenStore.getToken();
   const user = {
     authenticated: !!token,
     token: `Bearer ${token}`,

@@ -4,6 +4,8 @@ An auth provider for [react-admin](https://github.com/marmelab/react-admin) that
 
 It allows to easily enable users to sign in to your app in using their Google account, either personal, or professional via [Google Workspaces](https://workspace.google.com/).
 
+![ra-auth-google](packages/ra-auth-google/img/ra-auth-google.png)
+
 This repository contains:
 
 -   The actual `ra-auth-google` package

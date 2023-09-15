@@ -4,6 +4,8 @@ An auth provider for [react-admin](https://github.com/marmelab/react-admin) that
 
 It allows to easily enable users to sign to your app in using their Google account, either personal, or professional via [Google Workspaces](https://workspace.google.com/).
 
+![ra-auth-google](img/ra-auth-google.png)
+
 This package provides:
 
 -   An `authProvider` to use with your react-admin app
@@ -100,6 +102,8 @@ export default App;
 
 **Tip:** This example uses the [`<Login>`](https://marmelab.com/react-admin/Authentication.html#customizing-the-login-component) component provided by react-admin to create the login page. You can also include the `<LoginButton>` component in your own login page if you prefer.
 
+![LoginPage](img/LoginPage.png)
+
 ## Advanced Usage
 
 ### Provide the Client ID via a prop
@@ -142,6 +146,8 @@ export default App;
 ### One Tap button
 
 The `<OneTapButton>` component can be used to enable the [One Tap](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#one_tap) button on one or more pages.
+
+![OneTapButton](img/GoogleOneTapButton.png)
 
 It can be used as a standalone component, or to wrap a page.
 
@@ -210,6 +216,8 @@ export default App;
 ### Customizing the Sign in with Google button
 
 Google does not support using your own button to sign in. However, you can customize the button, using the [provided props](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#GsiButtonConfiguration), to better integrate it with your app.
+
+![LoginButton](img/GoogleLoginButton.png)
 
 You can also use the [code generator](https://developers.google.com/identity/gsi/web/tools/configurator) to try out the different options.
 

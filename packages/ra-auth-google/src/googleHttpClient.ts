@@ -1,6 +1,15 @@
 import { fetchUtils, Options } from "react-admin";
 import { localStorageTokenStore, TokenStore } from "./tokenStore";
 
+/**
+ * Returns an `httpClient` that can be used to make authenticated requests to your API.
+ * @param tokenStore *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+ * 
+ * @example
+ * ```ts
+ * const httpClient = googleHttpClient({ tokenStore: myTokenStore });
+ * ```
+ */
 export const googleHttpClient = ({
   tokenStore = localStorageTokenStore,
 }: {

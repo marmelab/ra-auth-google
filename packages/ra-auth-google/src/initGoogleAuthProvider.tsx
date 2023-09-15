@@ -9,6 +9,27 @@ import { googleHttpClient } from "./googleHttpClient";
 import { IdConfiguration } from "./types";
 import { TokenStore, localStorageTokenStore } from "./tokenStore";
 
+/**
+ * Use `initGoogleAuthProvider` to create an authProvider, a login button, a One Tap button and an `httpClient` from a single configuration object.
+ * 
+ * @param client_id *Optional* - The Google API client ID of your application. Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
+ * @param tokenStore *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+ * @param rest *Optional* - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+ * 
+ * @example
+ * ```ts
+ * const { authProvider, LoginButton, OneTapButton, httpClient } = initGoogleAuthProvider();
+ * ```
+ * 
+ * @example
+ * ```ts
+ * const { authProvider, LoginButton, OneTapButton, httpClient } = initGoogleAuthProvider({
+ *   client_id: "my-application-client-id.apps.googleusercontent.com",
+ *   context: "use",
+ *   tokenStore: myTokenStore,
+ * });
+ * ```
+ */
 export const initGoogleAuthProvider = (
   params?: InitGoogleAuthProviderParams
 ) => {

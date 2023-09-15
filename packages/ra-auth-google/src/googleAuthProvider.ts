@@ -3,6 +3,23 @@ import jwt_decode from "jwt-decode";
 import { CredentialResponse, IdConfiguration, UserPayload } from "./types";
 import { TokenStore, localStorageTokenStore } from "./tokenStore";
 
+/**
+ * Returns an authProvider that can be used with react-admin.
+ * 
+ * @param gsiParams **Required** - Parameters for the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+ * @param tokenStore *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+ * 
+ * @example
+ * ```ts
+ * const authProvider = googleAuthProvider({
+ *   gsiParams: { 
+ *     client_id: "my-application-client-id.apps.googleusercontent.com",
+ *     ux_mode: "popup", 
+ *   },
+ *   tokenStore: myTokenStore,
+ * });
+ * ```
+ */
 export const googleAuthProvider = ({
   gsiParams,
   tokenStore = localStorageTokenStore,

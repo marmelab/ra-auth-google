@@ -6,6 +6,8 @@ It allows to easily enable users to sign in to your app in using their Google ac
 
 ![ra-auth-google](packages/ra-auth-google/img/ra-auth-google.png)
 
+## Content
+
 [![Documentation]][DocumentationLink] 
 [![Source Code]][SourceCodeLink] 
 

@@ -6,15 +6,21 @@ It allows to easily enable users to sign in to your app in using their Google ac
 
 ![ra-auth-google](packages/ra-auth-google/img/ra-auth-google.png)
 
+## Content
+
+[![Documentation]][DocumentationLink] 
+[![Source Code]][SourceCodeLink] 
+
+[Documentation]: https://img.shields.io/badge/Documentation-green?style=for-the-badge
+[Source Code]: https://img.shields.io/badge/Source_Code-blue?style=for-the-badge
+
+[DocumentationLink]: ./packages/ra-auth-google/Readme.md 'Documentation'
+[SourceCodeLink]: https://github.com/marmelab/ra-auth-google/tree/main/packages/ra-auth-google 'Source Code'
+
 This repository contains:
 
 -   The actual `ra-auth-google` package
 -   A simple demo app you can run locally to try out `ra-auth-google` with your own Google API Client ID
-
-## The `ra-auth-google` package
-
--   Please have a look at the [DOCUMENTATION](./packages/ra-auth-google/Readme.md)
--   And also the [source code](https://github.com/marmelab/ra-auth-google/tree/main/packages/ra-auth-google)
 
 ## Simple Demo
 

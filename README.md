@@ -11,7 +11,7 @@ It allows to easily enable users to sign in to your app in using their Google ac
 [![Documentation]][DocumentationLink] 
 [![Source Code]][SourceCodeLink] 
 
-[Documentation]: https://img.shields.io/badge/Documentation-green?style=for-the-badge
+[Documentation]: https://img.shields.io/badge/Documentation-darkgreen?style=for-the-badge
 [Source Code]: https://img.shields.io/badge/Source_Code-blue?style=for-the-badge
 
 [DocumentationLink]: ./packages/ra-auth-google/Readme.md 'Documentation'

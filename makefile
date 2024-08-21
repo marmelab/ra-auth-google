@@ -20,7 +20,7 @@ build-demo-react-admin:
 build: build-ra-auth-google build-demo-react-admin ## compile ES6 files to JS
 
 start-demo: ## Start the demo
-	@cd ./packages/demo-react-admin && yarn start
+	@cd ./packages/demo-react-admin && yarn dev
 
 start-fake-api: ## Start the fake API
 	@cd ./packages/demo-fake-api && yarn start

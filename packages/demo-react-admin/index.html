@@ -8,7 +8,14 @@
       body {
         margin: 0;
       }
-    </style>
+      /* 
+        Because the style prop no longer exist in TanStack Query v5,
+        we have to use this rule to customize ReactQueryDevtools button size:
+      */
+      .tsqd-transitions-container>div {
+        height: 30px;
+        width: 30px;
+      }    </style>
     <script async defer src="https://accounts.google.com/gsi/client"></script>
   </head>
   <body>

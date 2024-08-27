@@ -27,7 +27,7 @@
     "scripts": {
         "build": "yarn workspaces run build",
         "build-demo": "cd packages/demo-react-admin && yarn build",
-        "run-demo": "cd packages/demo-react-admin && yarn start",
+        "run-demo": "cd packages/demo-react-admin && yarn dev",
         "test-unit": "cd packages/ra-auth-google && yarn test-unit",
         "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\"",
         "prettier": "prettier --write \"./packages/**/src/**/*.{js,ts,tsx}\""

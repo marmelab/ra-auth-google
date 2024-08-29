@@ -1,7 +1,7 @@
-import * as React from "react";
-import { useLogin, useAuthState } from "react-admin";
-import { useQueryClient } from "@tanstack/react-query";
-import { IdConfiguration } from "./types";
+import * as React from 'react';
+import { useLogin, useAuthState } from 'react-admin';
+import { useQueryClient } from '@tanstack/react-query';
+import { IdConfiguration } from './types';
 
 /**
  * The `<GoogleOneTapButton>` can be used either as a standalone component, or as a wrapper.
@@ -44,35 +44,37 @@ import { IdConfiguration } from "./types";
  * ```
  */
 export const GoogleOneTapButton = (props: GoogleOneTapButtonProps) => {
-  const { children, ...rest } = props;
-  const { isLoading, authenticated } = useAuthState();
-  const login = useLogin();
-  const queryClient = useQueryClient();
+    const { children, ...rest } = props;
+    const { isLoading, authenticated } = useAuthState();
+    const login = useLogin();
+    const queryClient = useQueryClient();
 
-  React.useEffect(() => {
-    if (!window?.google || isLoading || authenticated) {
-      return;
-    }
+    React.useEffect(() => {
+        if (!window?.google || isLoading || authenticated) {
+            return;
+        }
 
-    window.google.accounts.id.initialize({
-      ...rest,
-      callback: (credentials) => {
-        login(credentials).then(() => {
-          queryClient.invalidateQueries({ queryKey: ["auth", "getIdentity"] });
-          queryClient.invalidateQueries({
-            queryKey: ["auth", "getPermissions"],
-          });
+        window.google.accounts.id.initialize({
+            ...rest,
+            callback: credentials => {
+                login(credentials).then(() => {
+                    queryClient.invalidateQueries({
+                        queryKey: ['auth', 'getIdentity'],
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: ['auth', 'getPermissions'],
+                    });
+                });
+            },
         });
-      },
-    });
 
-    window.google.accounts.id.prompt();
-  }, [window?.google, isLoading, authenticated]);
+        window.google.accounts.id.prompt();
+    }, [isLoading, authenticated, rest, login, queryClient]);
 
-  return children ? <>{children}</> : null;
+    return children ? <>{children}</> : null;
 };
 
 export interface GoogleOneTapButtonProps
-  extends Omit<IdConfiguration, "callback"> {
-  children?: React.ReactNode;
+    extends Omit<IdConfiguration, 'callback'> {
+    children?: React.ReactNode;
 }

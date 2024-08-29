@@ -23,14 +23,21 @@ import {
     SingleFieldList,
     TextField,
     TextInput,
+    useRecordContext,
     useTranslate,
-    type SortPayload,
 } from 'react-admin'; // eslint-disable-line import/no-unresolved
+import type { SortPayload } from 'react-admin';
 
 import ResetViewsButton from './ResetViewsButton';
 export const PostIcon = BookIcon;
 
-const QuickFilter = ({ label, source, defaultValue }) => {
+const QuickFilter = ({
+    label,
+}: {
+    label: string;
+    source?: string;
+    defaultValue?: any;
+}) => {
     const translate = useTranslate();
     return <Chip sx={{ marginBottom: 1 }} label={translate(label)} />;
 };
@@ -81,7 +88,7 @@ const PostListBulkActions = memo(({ ...props }: any) => (
     </Fragment>
 ));
 
-const PostListActionToolbar = ({ children, ...props }) => (
+const PostListActionToolbar = ({ children }) => (
     <Box sx={{ alignItems: 'center', display: 'flex' }}>{children}</Box>
 );
 
@@ -93,9 +100,10 @@ const rowClick = (id, resource, record) => {
     return 'show';
 };
 
-const PostPanel = ({ id, record, resource }) => (
-    <div dangerouslySetInnerHTML={{ __html: record.body }} />
-);
+const PostPanel = () => {
+    const record = useRecordContext();
+    return <div dangerouslySetInnerHTML={{ __html: record?.body }} />;
+};
 
 const PostList = () => {
     const isSmall = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'));

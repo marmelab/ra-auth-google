@@ -1,4 +1,9 @@
-import { initGoogleAuthProvider } from 'ra-auth-google';
+import {
+    useGoogleAuthProvider,
+    GoogleAuthContextProvider,
+    GoogleLoginButton as LoginButton,
+    GoogleOneTapButton as OneTapButton,
+} from 'ra-auth-google';
 import jsonServerProvider from 'ra-data-json-server';
 import React from 'react';
 import { Admin, CustomRoutes, Login, Resource } from 'react-admin';
@@ -13,12 +18,7 @@ import tags from './tags';
 import users from './users';
 
 const App = () => {
-    const {
-        authProvider,
-        LoginButton,
-        OneTapButton,
-        httpClient,
-    } = initGoogleAuthProvider();
+    const { authProvider, httpClient, gsiParams } = useGoogleAuthProvider();
 
     const dataProvider = jsonServerProvider(
         'http://localhost:3000',
@@ -32,67 +32,69 @@ const App = () => {
     );
 
     return (
-        <Admin
-            authProvider={authProvider}
-            dataProvider={dataProvider}
-            i18nProvider={i18nProvider}
-            title="Example Admin"
-            layout={Layout}
-            loginPage={LoginPage}
-        >
-            {permissions => (
-                <>
-                    <CustomRoutes noLayout>
-                        <Route
-                            path="/custom"
-                            element={
-                                <CustomRouteNoLayout title="Posts from /custom" />
-                            }
-                        />
-                    </CustomRoutes>
-                    <Resource name="posts" {...posts} />
-                    <Resource name="comments" {...comments} />
-                    <Resource name="tags" {...tags} />
-                    {permissions ? (
-                        <>
-                            {permissions.includes('admin') ? (
-                                <Resource name="users" {...users} />
-                            ) : null}
-                            <CustomRoutes noLayout>
-                                <Route
-                                    path="/custom1"
-                                    element={
-                                        <OneTapButton>
-                                            <CustomRouteNoLayout title="Posts from /custom1" />
-                                        </OneTapButton>
-                                    }
-                                />
-                            </CustomRoutes>
-                            <CustomRoutes>
-                                <Route
-                                    path="/custom2"
-                                    element={
-                                        <CustomRouteLayout title="Posts from /custom2">
-                                            <OneTapButton />
-                                        </CustomRouteLayout>
-                                    }
-                                />
-                            </CustomRoutes>
-                        </>
-                    ) : null}
-                    <CustomRoutes>
-                        <Route
-                            path="/custom3"
-                            element={
-                                <CustomRouteLayout title="Posts from /custom3">
-                                    <OneTapButton />
-                                </CustomRouteLayout>
-                            }
-                        />
-                    </CustomRoutes>
-                </>
-            )}
-        </Admin>
+        <GoogleAuthContextProvider value={gsiParams}>
+            <Admin
+                authProvider={authProvider}
+                dataProvider={dataProvider}
+                i18nProvider={i18nProvider}
+                title="Example Admin"
+                layout={Layout}
+                loginPage={LoginPage}
+            >
+                {permissions => (
+                    <>
+                        <CustomRoutes noLayout>
+                            <Route
+                                path="/custom"
+                                element={
+                                    <CustomRouteNoLayout title="Posts from /custom" />
+                                }
+                            />
+                        </CustomRoutes>
+                        <Resource name="posts" {...posts} />
+                        <Resource name="comments" {...comments} />
+                        <Resource name="tags" {...tags} />
+                        {permissions ? (
+                            <>
+                                {permissions.includes('admin') ? (
+                                    <Resource name="users" {...users} />
+                                ) : null}
+                                <CustomRoutes noLayout>
+                                    <Route
+                                        path="/custom1"
+                                        element={
+                                            <OneTapButton>
+                                                <CustomRouteNoLayout title="Posts from /custom1" />
+                                            </OneTapButton>
+                                        }
+                                    />
+                                </CustomRoutes>
+                                <CustomRoutes>
+                                    <Route
+                                        path="/custom2"
+                                        element={
+                                            <CustomRouteLayout title="Posts from /custom2">
+                                                <OneTapButton />
+                                            </CustomRouteLayout>
+                                        }
+                                    />
+                                </CustomRoutes>
+                            </>
+                        ) : null}
+                        <CustomRoutes>
+                            <Route
+                                path="/custom3"
+                                element={
+                                    <CustomRouteLayout title="Posts from /custom3">
+                                        <OneTapButton />
+                                    </CustomRouteLayout>
+                                }
+                            />
+                        </CustomRoutes>
+                    </>
+                )}
+            </Admin>
+        </GoogleAuthContextProvider>
     );
 };
 export default App;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLogin, useAuthState } from 'react-admin';
 import { useQueryClient } from '@tanstack/react-query';
-import { IdConfiguration } from './types';
+import { useGoogleAuthContext } from './GoogleAuthContext';
 
 /**
  * The `<GoogleOneTapButton>` can be used either as a standalone component, or as a wrapper.
@@ -10,20 +10,9 @@ import { IdConfiguration } from './types';
  *
  * Use it in the pages that you want to enable the One Tap feature on.
  *
- * @param children *Optional* - The children to render. If provided, the component will be used as a wrapper.
- * @param rest **Required** - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+ * `<GoogleOneTapButton>` requires to be used inside a `<GoogleAuthContextProvider>`.
  *
- * @example
- * ```tsx
- * const MyPage = () => (
- *   <div>
- *     <GoogleOneTapButton
- *       client_id="my-application-client-id.apps.googleusercontent.com"
- *     />
- *     <h1>My Page</h1>
- *   </div>
- * );
- * ```
+ * @param children *Optional* - The children to render. If provided, the component will be used as a wrapper.
  *
  * @example
  * ```tsx
@@ -43,8 +32,13 @@ import { IdConfiguration } from './types';
  * );
  * ```
  */
-export const GoogleOneTapButton = (props: GoogleOneTapButtonProps) => {
-    const { children, ...rest } = props;
+export const GoogleOneTapButton = ({ children }: GoogleOneTapButtonProps) => {
+    const gsiParams = useGoogleAuthContext();
+    if (!gsiParams) {
+        throw new Error(
+            'GoogleOneTapButton must be used inside a GoogleAuthContextProvider'
+        );
+    }
     const { isLoading, authenticated } = useAuthState();
     const login = useLogin();
     const queryClient = useQueryClient();
@@ -55,7 +49,7 @@ export const GoogleOneTapButton = (props: GoogleOneTapButtonProps) => {
         }
 
         window.google.accounts.id.initialize({
-            ...rest,
+            ...gsiParams,
             callback: credentials => {
                 login(credentials).then(() => {
                     queryClient.invalidateQueries({
@@ -69,12 +63,11 @@ export const GoogleOneTapButton = (props: GoogleOneTapButtonProps) => {
         });
 
         window.google.accounts.id.prompt();
-    }, [isLoading, authenticated, rest, login, queryClient]);
+    }, [isLoading, authenticated, gsiParams, login, queryClient]);
 
     return children ? <>{children}</> : null;
 };
 
-export interface GoogleOneTapButtonProps
-    extends Omit<IdConfiguration, 'callback'> {
+export interface GoogleOneTapButtonProps {
     children?: React.ReactNode;
 }

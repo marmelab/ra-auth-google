@@ -14,7 +14,6 @@
         "react-hooks"
     ],
     "rules": {
-        "indent": ["error", 4],
         "no-use-before-define": "off",
         "prettier/prettier": "error",
         "no-restricted-imports": [

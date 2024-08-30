@@ -4,11 +4,11 @@ import { useLogin } from 'react-admin';
 import { GsiButtonConfiguration } from './types';
 import { useGoogleAuthContext } from './GoogleAuthContext';
 
-const GoogleButton = (props: Omit<GoogleLoginButtonProps, 'sx'>) => {
+const GoogleButton = (props: Omit<LoginButtonProps, 'sx'>) => {
     const gsiParams = useGoogleAuthContext();
     if (!gsiParams) {
         throw new Error(
-            'GoogleLoginButton must be used inside a GoogleAuthContextProvider'
+            'LoginButton must be used inside a GoogleAuthContextProvider'
         );
     }
     const login = useLogin();
@@ -48,14 +48,14 @@ const GoogleButton = (props: Omit<GoogleLoginButtonProps, 'sx'>) => {
  *
  * @example
  * ```tsx
- * const LoginButton = () => (
- *   <GoogleLoginButton
+ * const MyLoginButton = () => (
+ *   <LoginButton
  *     theme="filled_black"
  *   />
  * );
  * ```
  */
-export const GoogleLoginButton = (props: GoogleLoginButtonProps) => {
+export const LoginButton = (props: LoginButtonProps) => {
     const { sx, ...rest } = props;
 
     return (
@@ -74,6 +74,6 @@ const StyledBox = styled(Box, {
     marginTop: theme.spacing(4),
 }));
 
-export interface GoogleLoginButtonProps extends GsiButtonConfiguration {
+export interface LoginButtonProps extends GsiButtonConfiguration {
     sx?: SxProps;
 }

@@ -1,8 +1,8 @@
 import {
     useGoogleAuthProvider,
     GoogleAuthContextProvider,
-    GoogleLoginButton as LoginButton,
-    GoogleOneTapButton as OneTapButton,
+    LoginButton,
+    OneTapButton,
 } from 'ra-auth-google';
 import jsonServerProvider from 'ra-data-json-server';
 import React from 'react';

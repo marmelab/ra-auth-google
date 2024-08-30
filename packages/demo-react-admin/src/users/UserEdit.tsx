@@ -45,7 +45,7 @@ const EditActions = () => (
 const UserEditForm = ({ save, ...props }: { save?: any }) => {
     const { permissions } = usePermissions();
     const newSave = values =>
-        new Promise((resolve, reject) => {
+        new Promise(resolve => {
             if (values.name === 'test') {
                 return resolve({
                     name: {

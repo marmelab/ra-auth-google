@@ -74,7 +74,10 @@ export const googleAuthProvider = ({
 
         async checkAuth() {
             if (!tokenStore.getToken()) {
-                throw new Error('Unauthorized');
+                // Throwing { message: false } allows to tell react-admin the user is not authenticated
+                // but without displaying an error message
+                // eslint-disable-next-line no-throw-literal
+                throw { message: false };
             }
         },
 

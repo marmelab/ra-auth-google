@@ -63,7 +63,16 @@ export const OneTapButton = ({ children }: OneTapButtonProps) => {
         });
 
         window.google.accounts.id.prompt();
-    }, [isLoading, authenticated, gsiParams, login, queryClient]);
+        // we need to react on the presence of window.google
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        window?.google,
+        isLoading,
+        authenticated,
+        gsiParams,
+        login,
+        queryClient,
+    ]);
 
     return children ? <>{children}</> : null;
 };

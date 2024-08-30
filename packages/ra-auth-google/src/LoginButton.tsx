@@ -28,7 +28,9 @@ const GoogleButton = (props: Omit<LoginButtonProps, 'sx'>) => {
             width: '300px',
             ...props,
         });
-    }, [gsiParams, login, props]);
+        // we need to react on the presence of window.google
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [window?.google, gsiParams, login, props]);
 
     return <div ref={divRef} id="ra-google-login-button" />;
 };

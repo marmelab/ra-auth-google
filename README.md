@@ -8,7 +8,7 @@ It allows to easily enable users to sign in to your app in using their Google ac
 
 ## Content
 
-[![Tutorial]][TutorialLink]
+[![Tutorial]][TutorialLink] 
 [![Documentation]][DocumentationLink] 
 [![Source Code]][SourceCodeLink] 
 

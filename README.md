@@ -8,12 +8,15 @@ It allows to easily enable users to sign in to your app in using their Google ac
 
 ## Content
 
+[![Tutorial]][TutorialLink]
 [![Documentation]][DocumentationLink] 
 [![Source Code]][SourceCodeLink] 
 
+[Tutorial]: https://img.shields.io/badge/Tutorial-blueviolet?style=for-the-badge
 [Documentation]: https://img.shields.io/badge/Documentation-darkgreen?style=for-the-badge
 [Source Code]: https://img.shields.io/badge/Source_Code-blue?style=for-the-badge
 
+[TutorialLink]: https://marmelab.com/blog/2024/11/18/google-authentication-react.html 'Tutorial'
 [DocumentationLink]: ./packages/ra-auth-google/Readme.md 'Documentation'
 [SourceCodeLink]: https://github.com/marmelab/ra-auth-google/tree/main/packages/ra-auth-google 'Source Code'
 

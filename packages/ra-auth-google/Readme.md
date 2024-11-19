@@ -6,6 +6,14 @@ It allows to easily enable users to sign to your app in using their Google accou
 
 ![ra-auth-google](img/ra-auth-google.png)
 
+## Tutorial
+
+For a step-by-step tutorial covering installation, configuration and backend authentication, check out this article:
+
+https://marmelab.com/blog/2024/11/18/google-authentication-react.html
+
+## Overview 
+
 This package provides:
 
 -   An `authProvider` to use with your react-admin app

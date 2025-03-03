@@ -4,7 +4,7 @@ import { IdConfiguration } from './types';
 import { TokenStore, localStorageTokenStore } from './tokenStore';
 
 /**
- * Use `initGoogleAuthProvider` to create an authProvider, an `httpClient`,
+ * Use `getGoogleAuthProvider` to create an authProvider, an `httpClient`,
  * and obtain a `gsiParams` object from a single configuration object.
  *
  * `gsiParams` are to be exposed to the children components by using the
@@ -22,20 +22,20 @@ import { TokenStore, localStorageTokenStore } from './tokenStore';
  *
  * @example
  * ```ts
- * const { authProvider, httpClient, gsiParams } = initGoogleAuthProvider();
+ * const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider();
  * ```
  *
  * @example
  * ```ts
- * const { authProvider, httpClient, gsiParams } = initGoogleAuthProvider({
+ * const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider({
  *   client_id: "my-application-client-id.apps.googleusercontent.com",
  *   context: "use",
  *   tokenStore: myTokenStore,
  * });
  * ```
  */
-export const initGoogleAuthProvider = (
-    params?: initGoogleAuthProviderParams
+export const getGoogleAuthProvider = (
+    params?: getGoogleAuthProviderParams
 ) => {
     const {
         tokenStore = localStorageTokenStore,
@@ -64,7 +64,7 @@ export const initGoogleAuthProvider = (
     };
 };
 
-export interface initGoogleAuthProviderParams
+export interface getGoogleAuthProviderParams
     extends Omit<IdConfiguration, 'callback' | 'client_id'> {
     client_id?: string;
     tokenStore?: TokenStore;

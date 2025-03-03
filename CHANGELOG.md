@@ -1,3 +1,50 @@
+## 3.0.0
+
+- Simplify `ra-auth-google` usage
+- Transform the `useGoogleAuthProvider` into a function
+- Rename `useGoogleAuthProvider` into `initGoogleAuthProvider`
+
+### Breaking Changes
+
+```diff
+// in src/App.tsx
+import React from "react";
+import { Admin, Resource, Login } from "react-admin";
+import { 
+- useGoogleAuthProvider,
++ initGoogleAuthProvider,
+  LoginButton,
+  OneTapButton,
+  GoogleAuthContextProvider
+} from "ra-auth-google";
+import dataProvider from "./dataProvider";
+
+const App = () => {
+- const { authProvider, gsiParams } = useGoogleAuthProvider();
++ const { authProvider, gsiParams } = initGoogleAuthProvider();
+
+  const LoginPage = () => (
+    <Login>
+      <LoginButton />
+    </Login>
+  );
+
+  return (
+   <GoogleAuthContextProvider value={gsiParams}>
+      <Admin
+        authProvider={authProvider}
+        dataProvider={dataProvider}
+        title="Example Admin"
+        loginPage={LoginPage}
+      >
+        // ...
+      </Admin>
+   </GoogleAuthContextProvider>
+  );
+};
+export default App;
+```
+
 ## 2.0.0
 
 -   Upgrade `react-admin` to v5

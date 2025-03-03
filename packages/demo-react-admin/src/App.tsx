@@ -1,5 +1,5 @@
 import {
-    useGoogleAuthProvider,
+    initGoogleAuthProvider,
     GoogleAuthContextProvider,
     LoginButton,
     OneTapButton,
@@ -18,7 +18,7 @@ import tags from './tags';
 import users from './users';
 
 const App = () => {
-    const { authProvider, httpClient, gsiParams } = useGoogleAuthProvider();
+    const { authProvider, httpClient, gsiParams } = initGoogleAuthProvider();
 
     const dataProvider = jsonServerProvider(
         'http://localhost:3000',

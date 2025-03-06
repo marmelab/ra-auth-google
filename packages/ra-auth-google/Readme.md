@@ -8,12 +8,11 @@ It allows to easily enable users to sign to your app in using their Google accou
 
 This package provides:
 
--   An `authProvider` to use with your react-admin app
--   A `<LoginButton>` component to render the [Sign in with Google button](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#sign_in_with_google_button)
--   A `<OneTapButton>` component to enable the [One Tap](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#one_tap) feature on your website
--   An `httpClient` to make authenticated requests to your API
--   A helper hook called `getGoogleAuthProvider`, allowing to configure all of the above from a single configuration object
--   A helper component called `<GoogleAuthContextProvider>`, allowing to expose the GSI params to the children components like `<LoginButton>` and `<OneTapButton>`
+- An `authProvider` to use with your react-admin app
+- A `<LoginButton>` component to render the [Sign in with Google button](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#sign_in_with_google_button)
+- A `<OneTapButton>` component to enable the [One Tap](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#one_tap) feature on your website
+- An `httpClient` to make authenticated requests to your API
+- A helper hook called `getGoogleAuthProvider`, allowing to configure all of the above from a single configuration object
 
 ## Supported Features
 
@@ -45,6 +44,8 @@ It's up to you to implement these features in your back-end if you need them.
 yarn add ra-auth-google
 # or
 npm install --save ra-auth-google
+# or
+bun install ra-auth-google
 ```
 
 ## Basic Usage
@@ -74,16 +75,12 @@ VITE_GOOGLE_CLIENT_ID="my-application-client-id.apps.googleusercontent.com"
 // in src/App.tsx
 import React from "react";
 import { Admin, Resource, Login } from "react-admin";
-import {
-    getGoogleAuthProvider,
-    GoogleAuthContextProvider,
-    LoginButton,
-} from 'ra-auth-google';
+import { getGoogleAuthProvider, LoginButton } from 'ra-auth-google';
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider, gsiParams } = getGoogleAuthProvider();
+  const { authProvider } = getGoogleAuthProvider();
 
   const LoginPage = () => (
     <Login>
@@ -92,25 +89,20 @@ const App = () => {
   );
 
   return (
-    // Wrap your Admin with GoogleAuthContextProvider to expose the gsiParams to the children components
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
   );
 };
 export default App;
 ```
 
 **Tip:** This example uses the [`<Login>`](https://marmelab.com/react-admin/Authentication.html#customizing-the-login-component) component provided by react-admin to create the login page. You can also include the `<LoginButton>` component in your own login page if you prefer.
-
-**Tip:** Remember to wrap your `<Admin>` with `<GoogleAuthContextProvider>` to expose the `gsiParams` to the children components, like the `<LoginButton>`.
 
 ![LoginPage](img/LoginPage.png)
 
@@ -122,16 +114,12 @@ You can also provide the client id via a prop instead of using the `.env` file.
 // in src/App.tsx
 import React from 'react';
 import { Admin, Resource, Login } from 'react-admin';
-import {
-    getGoogleAuthProvider,
-    GoogleAuthContextProvider,
-    LoginButton,
-} from 'ra-auth-google';
+import { getGoogleAuthProvider, LoginButton } from 'ra-auth-google';
 import dataProvider from './dataProvider';
 import posts from './posts';
 
 const App = () => {
-  const { authProvider, gsiParams } = getGoogleAuthProvider({
+  const { authProvider } = getGoogleAuthProvider({
     client_id: "my-application-client-id.apps.googleusercontent.com",
   });
 
@@ -142,17 +130,55 @@ const App = () => {
   );
 
   return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
    );
+};
+export default App;
+```
+
+**Tip:** If your Google client ID is not accessible in your `.env` file with the `GOOGLE_CLIENT_ID` name, you'll **need** to pass it the `getGoogleAuthProvider` function :
+
+```sh
+# in .env
+VITE_PERSONAL_GOOGLE_ID="my-application-client-id.apps.googleusercontent.com"
+```
+
+```tsx
+// in src/App.tsx
+import React from "react";
+import { Admin, Resource, Login } from "react-admin";
+import { getGoogleAuthProvider, LoginButton } from 'ra-auth-google';
+import dataProvider from "./dataProvider";
+import posts from "./posts";
+
+const client_id = import.meta.env.VITE_PERSONAL_GOOGLE_ID;
+
+const App = () => {
+  const { authProvider } = getGoogleAuthProvider({ client_id });
+
+  const LoginPage = () => (
+    <Login>
+      <LoginButton theme="filled_black" />
+    </Login>
+  );
+
+  return (
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
+  );
 };
 export default App;
 ```
@@ -188,55 +214,6 @@ const Wrapper = () => {
 };
 ```
 
-**Tip:** Remember to wrap your `<Admin>` with `<GoogleAuthContextProvider>` to expose the `gsiParams` to the children components that need it, like the `<OneTapButton>`.
-
-Here is a full example enabling the One Tap button on a custom route:
-
-```tsx
-// in src/App.tsx
-import React from "react";
-import { Admin, Resource, Login, CustomRoutes } from "react-admin";
-import { Route } from "react-router-dom";
-import { getGoogleAuthProvider, LoginButton, OneTapButton, GoogleAuthContextProvider } from "ra-auth-google";
-import dataProvider from "./dataProvider";
-import posts from "./posts";
-
-const App = () => {
-  const { authProvider, gsiParams } = getGoogleAuthProvider();
-
-  const LoginPage = () => (
-    <Login>
-      <LoginButton />
-    </Login>
-  );
-
-  return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-        <CustomRoutes>
-          <Route
-            path="/custom"
-            element={
-              <div>
-                <OneTapButton />
-                <h1>My Page</h1>
-              </div>
-            }
-          />
-        </CustomRoutes>
-      </Admin>
-    </GoogleAuthContextProvider>
-  );
-};
-export default App;
-```
-
 ## Customizing The Sign In With Google Button
 
 Google does not support using your own button to sign in. However, you can customize the button, using the [provided props](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#GsiButtonConfiguration), to better integrate it with your app.
@@ -251,15 +228,12 @@ For instance, here is how to use a black-filled button theme instead of the defa
 // in src/App.tsx
 import React from 'react';
 import { Admin, Resource, Login } from 'react-admin';
-import { getGoogleAuthProvider, LoginButton, GoogleAuthContextProvider } from "ra-auth-google";
+import { getGoogleAuthProvider, LoginButton } from "ra-auth-google";
 import dataProvider from './dataProvider';
 import posts from './posts';
 
 const App = () => {
-  const {
-    authProvider,
-    gsiParams,
-  } = getGoogleAuthProvider();
+  const { authProvider } = getGoogleAuthProvider();
 
   const LoginPage = () => (
     <Login>
@@ -268,16 +242,14 @@ const App = () => {
   );
 
   return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
    );
 };
 export default App;
@@ -292,14 +264,12 @@ You can enable [Automatic sign-in](https://developers.google.com/identity/gsi/we
 import React from "react";
 import { Admin, Resource, Login, CustomRoutes } from "react-admin";
 import { Route } from "react-router-dom";
-import { getGoogleAuthProvider, LoginButton, OneTapButton, GoogleAuthContextProvider } from "ra-auth-google";
+import { getGoogleAuthProvider, LoginButton, OneTapButton } from "ra-auth-google";
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider, gsiParams } = getGoogleAuthProvider({
-    auto_select: true,
-  });
+  const { authProvider } = getGoogleAuthProvider({ auto_select: true });
 
   const LoginPage = () => (
     <Login>
@@ -308,27 +278,25 @@ const App = () => {
   );
 
   return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-        <CustomRoutes>
-          <Route
-            path="/custom"
-            element={
-              <div>
-                <OneTapButton />
-                <h1>My Page</h1>
-              </div>
-            }
-          />
-        </CustomRoutes>
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+      <CustomRoutes>
+        <Route
+          path="/custom"
+          element={
+            <div>
+              <OneTapButton />
+              <h1>My Page</h1>
+            </div>
+          }
+        />
+      </CustomRoutes>
+    </Admin>
   );
 };
 export default App;
@@ -345,14 +313,12 @@ For example, to change the text of the title and messages in the One Tap prompt,
 import React from "react";
 import { Admin, Resource, Login, CustomRoutes } from "react-admin";
 import { Route } from "react-router-dom";
-import { getGoogleAuthProvider, LoginButton, OneTapButton, GoogleAuthContextProvider } from "ra-auth-google";
+import { getGoogleAuthProvider, LoginButton, OneTapButton } from "ra-auth-google";
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider, gsiParams } = getGoogleAuthProvider({
-    context: "use",
-  });
+  const { authProvider } = getGoogleAuthProvider({ context: "use" });
 
   const LoginPage = () => (
     <Login>
@@ -361,27 +327,25 @@ const App = () => {
   );
 
   return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-        <CustomRoutes>
-          <Route
-            path="/custom"
-            element={
-              <div>
-                <OneTapButton />
-                <h1>My Page</h1>
-              </div>
-            }
-          />
-        </CustomRoutes>
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+      <CustomRoutes>
+        <Route
+          path="/custom"
+          element={
+            <div>
+              <OneTapButton />
+              <h1>My Page</h1>
+            </div>
+          }
+        />
+      </CustomRoutes>
+    </Admin>
   );
 };
 export default App;
@@ -395,14 +359,14 @@ Here is an example with `ra-data-json-server`:
 
 ```tsx
 // in src/App.tsx
-import { getGoogleAuthProvider, LoginButton, GoogleAuthContextProvider } from "ra-auth-google";
+import { getGoogleAuthProvider, LoginButton } from "ra-auth-google";
 import jsonServerProvider from "ra-data-json-server";
 import React from "react";
 import { Admin, Login, Resource } from "react-admin";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider();
+  const { authProvider, httpClient } = getGoogleAuthProvider();
 
   const dataProvider = jsonServerProvider(
     "https://jsonplaceholder.typicode.com",
@@ -416,16 +380,14 @@ const App = () => {
   );
 
   return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
   );
 };
 export default App;
@@ -450,7 +412,7 @@ export const myTokenStore: TokenStore = {
 
 ```tsx
 // in src/App.tsx
-import { getGoogleAuthProvider, LoginButton, GoogleAuthContextProvider } from "ra-auth-google";
+import { getGoogleAuthProvider, LoginButton } from "ra-auth-google";
 import jsonServerProvider from "ra-data-json-server";
 import React from "react";
 import { Admin, Login, Resource } from "react-admin";
@@ -458,7 +420,7 @@ import posts from "./posts";
 import { myTokenStore } from "./myTokenStore";
 
 const App = () => {
-  const { authProvider, gsiParams, httpClient } = getGoogleAuthProvider({
+  const { authProvider, httpClient } = getGoogleAuthProvider({
     tokenStore: myTokenStore,
   });
 
@@ -474,16 +436,14 @@ const App = () => {
   );
 
   return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        title="Example Admin"
-        loginPage={LoginPage}
-      >
-        <Resource name="posts" {...posts} />
-      </Admin>
-    </GoogleAuthContextProvider>
+    <Admin
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+      title="Example Admin"
+      loginPage={LoginPage}
+    >
+      <Resource name="posts" {...posts} />
+    </Admin>
   );
 };
 export default App;
@@ -495,17 +455,15 @@ export default App;
 
 Use `getGoogleAuthProvider` to create an [authProvider](#googleauthprovider), an [`httpClient`](#googlehttpclient), and obtain a `gsiParams` object from a single configuration object.
 
-The `gsiParams` can then be exposed to the children components using the `<GoogleAuthContextProvider>` wrapper.
-
 ```ts
 const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider();
 ```
 
 It accepts the following parameters:
 
--   `client_id`: *Optional* - The Google API client ID of your application. Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
--   `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
--   Other parameters: *Optional* - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+- `client_id`: **Required** - The Google API client ID of your application. Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
+- `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+- Other parameters: *Optional* - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
 
 ```ts
 const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider({
@@ -515,14 +473,16 @@ const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider({
 });
 ```
 
+**Tip:** The `client_id` parameter became optional if the `GOOGLE_CLIENT_ID` environment variable is set
+
 ### `googleAuthProvider`
 
 Returns an authProvider that can be used with react-admin.
 
 It accepts the following parameters:
 
--   `gsiParams`: **Required** - Parameters for the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
--   `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+- `gsiParams`: **Required** - Parameters for the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
+- `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
 
 ```ts
 const authProvider = googleAuthProvider({
@@ -538,12 +498,10 @@ const authProvider = googleAuthProvider({
 
 Returns a component that can be used to render the [Sign in with Google button](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#sign_in_with_google_button).
 
-It requires to be used inside a `<GoogleAuthContextProvider>`.
-
 It accepts the following props:
 
--   `sx`: *Optional* - Allows to customize the MUI `<Box>` inside which the button is rendered. See [MUI `sx` prop](https://mui.com/system/basics/#the-sx-prop) for more information.
--   Other parameters: *Optional* - All the other parameters are passed to the Sign in with Google button, and allow for customization. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#GsiButtonConfiguration) for the full list of supported parameters.
+- `sx`: *Optional* - Allows to customize the MUI `<Box>` inside which the button is rendered. See [MUI `sx` prop](https://mui.com/system/basics/#the-sx-prop) for more information.
+- Other parameters: *Optional* - All the other parameters are passed to the Sign in with Google button, and allow for customization. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#GsiButtonConfiguration) for the full list of supported parameters.
 
 ```tsx
 const MyLoginButton = () => (
@@ -556,8 +514,6 @@ const MyLoginButton = () => (
 ### `<OneTapButton>`
 
 The `<OneTapButton>` can be used either as a standalone component, or as a wrapper.
-
-It requires to be used inside a `<GoogleAuthContextProvider>`.
 
 The component itself doesn't render anything, but it triggers the Google API to display the One Tap prompt if the user is not yet signed in.
 
@@ -586,43 +542,10 @@ Returns an `httpClient` that can be used to make authenticated requests to your 
 
 It accepts the following parameters:
 
--   `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+- `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
 
 ```ts
 const httpClient = googleHttpClient({ tokenStore: myTokenStore });
-```
-
-### `<GoogleAuthContextProvider>`
-
-A helper component that allows to expose the `gsiParams` to the children components like `<LoginButton>` and `<OneTapButton>`.
-
-Use it to wrap your `<Admin>` component with the `gsiParams` obtained from `getGoogleAuthProvider`.
-
-```tsx
-// in src/App.tsx
-import React from "react";
-import { Admin, Resource } from "react-admin";
-import {
-    getGoogleAuthProvider,
-    GoogleAuthContextProvider,
-} from 'ra-auth-google';
-import dataProvider from "./dataProvider";
-import posts from "./posts";
-
-const App = () => {
-  const { authProvider, gsiParams } = getGoogleAuthProvider();
-
-  return (
-    <GoogleAuthContextProvider value={gsiParams}>
-      <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-      >
-        <Resource name="posts" {...posts} />
-      </Admin>
-    </GoogleAuthContextProvider>
-  );
-};
 ```
 
 ## Demo

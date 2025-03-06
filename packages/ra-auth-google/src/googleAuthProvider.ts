@@ -91,6 +91,8 @@ export const googleAuthProvider = ({
                 ? JSON.parse(localStorage.getItem('user'))
                 : undefined;
         },
+
+        gsiParams,
     };
 
     return authProvider;

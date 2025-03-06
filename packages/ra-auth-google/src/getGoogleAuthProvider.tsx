@@ -8,7 +8,7 @@ import { TokenStore, localStorageTokenStore } from './tokenStore';
  * and obtain a `gsiParams` object from a single configuration object.
  *
  * `gsiParams` are to be exposed to the children components by using the
- * `GoogleAuthContextProvider`.
+ * `authProvider`.
  *
  * @param client_id *Required* - The Google API client ID of your application.
  *   Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
@@ -34,9 +34,7 @@ import { TokenStore, localStorageTokenStore } from './tokenStore';
  * });
  * ```
  */
-export const getGoogleAuthProvider = (
-    params?: getGoogleAuthProviderParams
-) => {
+export const getGoogleAuthProvider = (params?: getGoogleAuthProviderParams) => {
     const {
         tokenStore = localStorageTokenStore,
         ux_mode = 'popup',

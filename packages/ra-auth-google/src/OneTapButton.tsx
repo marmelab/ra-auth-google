@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { useLogin, useAuthState } from 'react-admin';
+import { useLogin, useAuthState, useAuthProvider } from 'react-admin';
 import { useQueryClient } from '@tanstack/react-query';
-import { useGoogleAuthContext } from './GoogleAuthContext';
 
 /**
  * The `<OneTapButton>` can be used either as a standalone component, or as a wrapper.
@@ -9,8 +8,6 @@ import { useGoogleAuthContext } from './GoogleAuthContext';
  * The component itself doesn't render anything, but it triggers the Google API to display the One Tap prompt if the user is not yet signed in.
  *
  * Use it in the pages that you want to enable the One Tap feature on.
- *
- * `<OneTapButton>` requires to be used inside a `<GoogleAuthContextProvider>`.
  *
  * @param children *Optional* - The children to render. If provided, the component will be used as a wrapper.
  *
@@ -33,12 +30,8 @@ import { useGoogleAuthContext } from './GoogleAuthContext';
  * ```
  */
 export const OneTapButton = ({ children }: OneTapButtonProps) => {
-    const gsiParams = useGoogleAuthContext();
-    if (!gsiParams) {
-        throw new Error(
-            'OneTapButton must be used inside a GoogleAuthContextProvider'
-        );
-    }
+    const authProvider = useAuthProvider();
+    const gsiParams = authProvider.gsiParams;
     const { isLoading, authenticated } = useAuthState();
     const login = useLogin();
     const queryClient = useQueryClient();

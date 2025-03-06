@@ -1,16 +1,11 @@
 import { Box, SxProps, styled } from '@mui/material';
 import * as React from 'react';
-import { useLogin } from 'react-admin';
+import { useLogin, useAuthProvider } from 'react-admin';
 import { GsiButtonConfiguration } from './types';
-import { useGoogleAuthContext } from './GoogleAuthContext';
 
 const GoogleButton = (props: Omit<LoginButtonProps, 'sx'>) => {
-    const gsiParams = useGoogleAuthContext();
-    if (!gsiParams) {
-        throw new Error(
-            'LoginButton must be used inside a GoogleAuthContextProvider'
-        );
-    }
+    const authProvider = useAuthProvider();
+    const gsiParams = authProvider.gsiParams;
     const login = useLogin();
     const divRef = React.useRef<HTMLDivElement>(null);
 
@@ -38,8 +33,6 @@ const GoogleButton = (props: Omit<LoginButtonProps, 'sx'>) => {
 /**
  * Returns a component that can be used to render the
  * [Sign in with Google button](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#sign_in_with_google_button).
- *
- * Requires to be used inside a `<GoogleAuthContextProvider>`.
  *
  * @param sx *Optional* - Allows to customize the MUI `<Box>` inside which the button is rendered.
  *   See [MUI `sx` prop](https://mui.com/system/basics/#the-sx-prop) for more information.

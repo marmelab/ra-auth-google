@@ -2,7 +2,8 @@
 
 - Simplify `ra-auth-google` usage
 - Transform the `useGoogleAuthProvider` into a function
-- Rename `useGoogleAuthProvider` into `initGoogleAuthProvider`
+- Rename `useGoogleAuthProvider` into `getGoogleAuthProvider`
+- Remove the `GoogleAuthContext`
 
 ### Breaking Changes
 
@@ -12,16 +13,16 @@ import React from "react";
 import { Admin, Resource, Login } from "react-admin";
 import { 
 - useGoogleAuthProvider,
-+ initGoogleAuthProvider,
++ getGoogleAuthProvider,
   LoginButton,
   OneTapButton,
-  GoogleAuthContextProvider
+-  GoogleAuthContextProvider
 } from "ra-auth-google";
 import dataProvider from "./dataProvider";
 
 const App = () => {
 - const { authProvider, gsiParams } = useGoogleAuthProvider();
-+ const { authProvider, gsiParams } = initGoogleAuthProvider();
++ const { authProvider } = getGoogleAuthProvider();
 
   const LoginPage = () => (
     <Login>
@@ -30,7 +31,7 @@ const App = () => {
   );
 
   return (
-   <GoogleAuthContextProvider value={gsiParams}>
+-   <GoogleAuthContextProvider value={gsiParams}>
       <Admin
         authProvider={authProvider}
         dataProvider={dataProvider}
@@ -39,7 +40,7 @@ const App = () => {
       >
         // ...
       </Admin>
-   </GoogleAuthContextProvider>
+-   </GoogleAuthContextProvider>
   );
 };
 export default App;

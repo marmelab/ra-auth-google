@@ -1,5 +1,6 @@
 import {
-    getGoogleAuthProvider,
+    googleAuthProvider,
+    googleHttpClient,
     LoginButton,
     OneTapButton,
 } from 'ra-auth-google';
@@ -17,7 +18,8 @@ import tags from './tags';
 import users from './users';
 
 const App = () => {
-    const { authProvider, httpClient } = getGoogleAuthProvider();
+    const authProvider = googleAuthProvider();
+    const httpClient = googleHttpClient();
 
     const dataProvider = jsonServerProvider(
         'http://localhost:3000',

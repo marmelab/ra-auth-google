@@ -1,9 +1,9 @@
 ## 3.0.0
 
-- Simplify `ra-auth-google` usage
-- Remove `useGoogleAuthProvider` and the `GoogleAuthContext`
-- Make `googleAuthProvider` and `googleHttpClient` callable without any params
-- Simplify `googleAuthProvider` signature
+-   Simplify `ra-auth-google` usage
+-   Remove `useGoogleAuthProvider` and the `GoogleAuthContext`
+-   Make `googleAuthProvider` and `googleHttpClient` callable without any params
+-   Simplify `googleAuthProvider` signature
 
 ### Breaking Changes
 
@@ -23,7 +23,7 @@ const autProvider = googleAuthProvider({
 // in src/App.tsx
 import React from "react";
 import { Admin, Resource, Login } from "react-admin";
-import { 
+import {
 - useGoogleAuthProvider,
 + googleAuthProvider,
 + googleHttpClient,
@@ -33,13 +33,15 @@ import {
 } from "ra-auth-google";
 import dataProvider from "./dataProvider";
 
++const authProvider = googleAuthProvider();
++const httpClient = googleHttpClient();
+
 const App = () => {
 - const { authProvider, gsiParams, httpClient } = useGoogleAuthProvider();
 
   const dataProvider = jsonServerProvider(
       'http://localhost:3000',
--     httpClient
-+     googleHttpClient()
+      httpClient
   );
 
   const LoginPage = () => (
@@ -51,8 +53,7 @@ const App = () => {
   return (
 -   <GoogleAuthContextProvider value={gsiParams}>
       <Admin
--       authProvider={authProvider}
-+       authProvider={googleAuthProvider()}
+        authProvider={authProvider}
         dataProvider={dataProvider}
         title="Example Admin"
         loginPage={LoginPage}
@@ -132,4 +133,4 @@ Both components now expect to be rendered inside a `<GoogleAuthContextProvider>`
 
 ## 1.0.0
 
-* Initial release
+-   Initial release

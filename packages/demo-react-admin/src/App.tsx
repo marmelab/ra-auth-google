@@ -17,10 +17,13 @@ import posts from './posts';
 import tags from './tags';
 import users from './users';
 
+const authProvider = googleAuthProvider();
+const httpClient = googleHttpClient();
+
 const App = () => {
     const dataProvider = jsonServerProvider(
         'http://localhost:3000',
-        googleHttpClient()
+        httpClient
     );
 
     const LoginPage = () => (
@@ -31,7 +34,7 @@ const App = () => {
 
     return (
         <Admin
-            authProvider={googleAuthProvider()}
+            authProvider={authProvider}
             dataProvider={dataProvider}
             i18nProvider={i18nProvider}
             title="Example Admin"

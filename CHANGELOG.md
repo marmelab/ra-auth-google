@@ -1,11 +1,23 @@
 ## 3.0.0
 
 - Simplify `ra-auth-google` usage
-- Transform the `useGoogleAuthProvider` into a function
-- Rename `useGoogleAuthProvider` into `getGoogleAuthProvider`
-- Remove the `GoogleAuthContext`
+- Remove `useGoogleAuthProvider` and the `GoogleAuthContext`
+- Make `googleAuthProvider` and `googleHttpClient` callable without any params
+- Destructure `googleAuthProvider` params
 
 ### Breaking Changes
+
+```diff
+const autProvider = googleAuthProvider({
+-   {
+-     client_id: "my-application-client-id.apps.googleusercontent.com",
+-     ux_mode: "popup",
+-   },
++   client_id: "my-application-client-id.apps.googleusercontent.com",
++   ux_mode: "popup",
+    tokenStore: myTokenStore,
+  });
+```
 
 ```diff
 // in src/App.tsx
@@ -13,7 +25,8 @@ import React from "react";
 import { Admin, Resource, Login } from "react-admin";
 import { 
 - useGoogleAuthProvider,
-+ getGoogleAuthProvider,
++ googleAuthProvider,
++ googleHttpClient,
   LoginButton,
   OneTapButton,
 -  GoogleAuthContextProvider
@@ -21,8 +34,9 @@ import {
 import dataProvider from "./dataProvider";
 
 const App = () => {
-- const { authProvider, gsiParams } = useGoogleAuthProvider();
-+ const { authProvider } = getGoogleAuthProvider();
+- const { authProvider, gsiParams, httpClient } = useGoogleAuthProvider();
++ const authProvider = googleAuthProvider();
++ const httpClient = googleHttpClient();
 
   const LoginPage = () => (
     <Login>

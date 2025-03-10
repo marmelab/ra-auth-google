@@ -35,8 +35,12 @@ import dataProvider from "./dataProvider";
 
 const App = () => {
 - const { authProvider, gsiParams, httpClient } = useGoogleAuthProvider();
-+ const authProvider = googleAuthProvider();
-+ const httpClient = googleHttpClient();
+
+  const dataProvider = jsonServerProvider(
+      'http://localhost:3000',
+-     httpClient
++     googleHttpClient()
+  );
 
   const LoginPage = () => (
     <Login>
@@ -47,7 +51,8 @@ const App = () => {
   return (
 -   <GoogleAuthContextProvider value={gsiParams}>
       <Admin
-        authProvider={authProvider}
+-       authProvider={authProvider}
++       authProvider={googleAuthProvider()}
         dataProvider={dataProvider}
         title="Example Admin"
         loginPage={LoginPage}

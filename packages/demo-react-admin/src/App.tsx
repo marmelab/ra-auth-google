@@ -18,12 +18,9 @@ import tags from './tags';
 import users from './users';
 
 const App = () => {
-    const authProvider = googleAuthProvider();
-    const httpClient = googleHttpClient();
-
     const dataProvider = jsonServerProvider(
         'http://localhost:3000',
-        httpClient
+        googleHttpClient()
     );
 
     const LoginPage = () => (
@@ -34,7 +31,7 @@ const App = () => {
 
     return (
         <Admin
-            authProvider={authProvider}
+            authProvider={googleAuthProvider()}
             dataProvider={dataProvider}
             i18nProvider={i18nProvider}
             title="Example Admin"

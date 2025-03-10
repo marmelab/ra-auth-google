@@ -77,8 +77,6 @@ import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const authProvider = googleAuthProvider();
-
   const LoginPage = () => (
     <Login>
       <LoginButton theme="filled_black" />
@@ -87,7 +85,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider()}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -116,10 +114,6 @@ import dataProvider from './dataProvider';
 import posts from './posts';
 
 const App = () => {
-  const authProvider = googleAuthProvider({
-    client_id: "my-application-client-id.apps.googleusercontent.com",
-  });
-
   const LoginPage = () => (
     <Login>
       <LoginButton />
@@ -128,7 +122,9 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider({
+        client_id: "my-application-client-id.apps.googleusercontent.com",
+      })}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -158,8 +154,6 @@ import posts from "./posts";
 const client_id = import.meta.env.VITE_PERSONAL_GOOGLE_ID;
 
 const App = () => {
-  const authProvider = googleAuthProvider({ client_id });
-
   const LoginPage = () => (
     <Login>
       <LoginButton theme="filled_black" />
@@ -168,7 +162,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider({ client_id })}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -230,8 +224,6 @@ import dataProvider from './dataProvider';
 import posts from './posts';
 
 const App = () => {
-  const authProvider = googleAuthProvider();
-
   const LoginPage = () => (
     <Login>
       <LoginButton theme="filled_black" />
@@ -240,7 +232,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider()}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -266,8 +258,6 @@ import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const authProvider = googleAuthProvider({ auto_select: true });
-
   const LoginPage = () => (
     <Login>
       <LoginButton />
@@ -276,7 +266,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider({ auto_select: true })}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -315,8 +305,6 @@ import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const authProvider = googleAuthProvider({ context: "use" });
-
   const LoginPage = () => (
     <Login>
       <LoginButton />
@@ -325,7 +313,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider({ context: "use" })}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -363,12 +351,9 @@ import { Admin, Login, Resource } from "react-admin";
 import posts from "./posts";
 
 const App = () => {
-  const authProvider = googleAuthProvider();
-  const httpClient = googleHttpClient();
-
   const dataProvider = jsonServerProvider(
     "https://jsonplaceholder.typicode.com",
-    httpClient
+    googleHttpClient()
   );
 
   const LoginPage = () => (
@@ -379,7 +364,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider()}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}
@@ -410,7 +395,7 @@ export const myTokenStore: TokenStore = {
 
 ```tsx
 // in src/App.tsx
-import { googleAuthProvider, LoginButton } from "ra-auth-google";
+import { googleAuthProvider, googleHttpClient, LoginButton } from "ra-auth-google";
 import jsonServerProvider from "ra-data-json-server";
 import React from "react";
 import { Admin, Login, Resource } from "react-admin";
@@ -418,12 +403,9 @@ import posts from "./posts";
 import { myTokenStore } from "./myTokenStore";
 
 const App = () => {
-  const authProvider = googleAuthProvider({ tokenStore: myTokenStore });
-  const httpClient = googleHttpClient({ tokenStore: myTokenStore });
-
   const dataProvider = jsonServerProvider(
     "https://jsonplaceholder.typicode.com",
-    httpClient
+    googleHttpClient({ tokenStore: myTokenStore })
   );
 
   const LoginPage = () => (
@@ -434,7 +416,7 @@ const App = () => {
 
   return (
     <Admin
-      authProvider={authProvider}
+      authProvider={googleAuthProvider({ tokenStore: myTokenStore })}
       dataProvider={dataProvider}
       title="Example Admin"
       loginPage={LoginPage}

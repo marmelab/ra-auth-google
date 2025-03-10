@@ -43,8 +43,6 @@ It's up to you to implement these features in your back-end if you need them.
 yarn add ra-auth-google
 # or
 npm install --save ra-auth-google
-# or
-bun install ra-auth-google
 ```
 
 ## Basic Usage

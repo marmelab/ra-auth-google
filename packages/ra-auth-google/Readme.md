@@ -12,7 +12,6 @@ This package provides:
 - A `<LoginButton>` component to render the [Sign in with Google button](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#sign_in_with_google_button)
 - A `<OneTapButton>` component to enable the [One Tap](https://developers.google.com/identity/gsi/web/guides/offerings?hl=en#one_tap) feature on your website
 - An `httpClient` to make authenticated requests to your API
-- A helper hook called `getGoogleAuthProvider`, allowing to configure all of the above from a single configuration object
 
 ## Supported Features
 
@@ -75,12 +74,12 @@ VITE_GOOGLE_CLIENT_ID="my-application-client-id.apps.googleusercontent.com"
 // in src/App.tsx
 import React from "react";
 import { Admin, Resource, Login } from "react-admin";
-import { getGoogleAuthProvider, LoginButton } from 'ra-auth-google';
+import { googleAuthProvider, LoginButton } from 'ra-auth-google';
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider } = getGoogleAuthProvider();
+  const authProvider = googleAuthProvider();
 
   const LoginPage = () => (
     <Login>
@@ -114,12 +113,12 @@ You can also provide the client id via a prop instead of using the `.env` file.
 // in src/App.tsx
 import React from 'react';
 import { Admin, Resource, Login } from 'react-admin';
-import { getGoogleAuthProvider, LoginButton } from 'ra-auth-google';
+import { googleAuthProvider, LoginButton } from 'ra-auth-google';
 import dataProvider from './dataProvider';
 import posts from './posts';
 
 const App = () => {
-  const { authProvider } = getGoogleAuthProvider({
+  const authProvider = googleAuthProvider({
     client_id: "my-application-client-id.apps.googleusercontent.com",
   });
 
@@ -143,7 +142,7 @@ const App = () => {
 export default App;
 ```
 
-**Tip:** If your Google client ID is not accessible in your `.env` file with the `GOOGLE_CLIENT_ID` name, you'll **need** to pass it the `getGoogleAuthProvider` function :
+**Tip:** If your Google client ID is not accessible in your `.env` file with the `GOOGLE_CLIENT_ID` name, you'll **need** to pass it the `googleAuthProvider` function :
 
 ```sh
 # in .env
@@ -154,14 +153,14 @@ VITE_PERSONAL_GOOGLE_ID="my-application-client-id.apps.googleusercontent.com"
 // in src/App.tsx
 import React from "react";
 import { Admin, Resource, Login } from "react-admin";
-import { getGoogleAuthProvider, LoginButton } from 'ra-auth-google';
+import { googleAuthProvider, LoginButton } from 'ra-auth-google';
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const client_id = import.meta.env.VITE_PERSONAL_GOOGLE_ID;
 
 const App = () => {
-  const { authProvider } = getGoogleAuthProvider({ client_id });
+  const authProvider = googleAuthProvider({ client_id });
 
   const LoginPage = () => (
     <Login>
@@ -228,12 +227,12 @@ For instance, here is how to use a black-filled button theme instead of the defa
 // in src/App.tsx
 import React from 'react';
 import { Admin, Resource, Login } from 'react-admin';
-import { getGoogleAuthProvider, LoginButton } from "ra-auth-google";
+import { googleAuthProvider, LoginButton } from "ra-auth-google";
 import dataProvider from './dataProvider';
 import posts from './posts';
 
 const App = () => {
-  const { authProvider } = getGoogleAuthProvider();
+  const authProvider = googleAuthProvider();
 
   const LoginPage = () => (
     <Login>
@@ -264,12 +263,12 @@ You can enable [Automatic sign-in](https://developers.google.com/identity/gsi/we
 import React from "react";
 import { Admin, Resource, Login, CustomRoutes } from "react-admin";
 import { Route } from "react-router-dom";
-import { getGoogleAuthProvider, LoginButton, OneTapButton } from "ra-auth-google";
+import { googleAuthProvider, LoginButton, OneTapButton } from "ra-auth-google";
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider } = getGoogleAuthProvider({ auto_select: true });
+  const authProvider = googleAuthProvider({ auto_select: true });
 
   const LoginPage = () => (
     <Login>
@@ -304,7 +303,7 @@ export default App;
 
 ## Configuring The Google Identity Services Library
 
-`getGoogleAuthProvider` accepts all the [parameters](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) supported by the GIS library.
+`googleAuthProvider` accepts all the [parameters](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) supported by the GIS library.
 
 For example, to change the text of the title and messages in the One Tap prompt, use the [`context`](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#context) parameter:
 
@@ -313,12 +312,12 @@ For example, to change the text of the title and messages in the One Tap prompt,
 import React from "react";
 import { Admin, Resource, Login, CustomRoutes } from "react-admin";
 import { Route } from "react-router-dom";
-import { getGoogleAuthProvider, LoginButton, OneTapButton } from "ra-auth-google";
+import { googleAuthProvider, LoginButton, OneTapButton } from "ra-auth-google";
 import dataProvider from "./dataProvider";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider } = getGoogleAuthProvider({ context: "use" });
+  const authProvider = googleAuthProvider({ context: "use" });
 
   const LoginPage = () => (
     <Login>
@@ -359,14 +358,15 @@ Here is an example with `ra-data-json-server`:
 
 ```tsx
 // in src/App.tsx
-import { getGoogleAuthProvider, LoginButton } from "ra-auth-google";
+import { googleAuthProvider, googleHttpClient, LoginButton } from "ra-auth-google";
 import jsonServerProvider from "ra-data-json-server";
 import React from "react";
 import { Admin, Login, Resource } from "react-admin";
 import posts from "./posts";
 
 const App = () => {
-  const { authProvider, httpClient } = getGoogleAuthProvider();
+  const authProvider = googleAuthProvider();
+  const httpClient = googleHttpClient();
 
   const dataProvider = jsonServerProvider(
     "https://jsonplaceholder.typicode.com",
@@ -412,7 +412,7 @@ export const myTokenStore: TokenStore = {
 
 ```tsx
 // in src/App.tsx
-import { getGoogleAuthProvider, LoginButton } from "ra-auth-google";
+import { googleAuthProvider, LoginButton } from "ra-auth-google";
 import jsonServerProvider from "ra-data-json-server";
 import React from "react";
 import { Admin, Login, Resource } from "react-admin";
@@ -420,9 +420,8 @@ import posts from "./posts";
 import { myTokenStore } from "./myTokenStore";
 
 const App = () => {
-  const { authProvider, httpClient } = getGoogleAuthProvider({
-    tokenStore: myTokenStore,
-  });
+  const authProvider = googleAuthProvider({ tokenStore: myTokenStore });
+  const httpClient = googleHttpClient({ tokenStore: myTokenStore });
 
   const dataProvider = jsonServerProvider(
     "https://jsonplaceholder.typicode.com",
@@ -450,30 +449,6 @@ export default App;
 ```
 
 ## API
-
-### `getGoogleAuthProvider`
-
-Use `getGoogleAuthProvider` to create an [authProvider](#googleauthprovider), an [`httpClient`](#googlehttpclient), and obtain a `gsiParams` object from a single configuration object.
-
-```ts
-const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider();
-```
-
-It accepts the following parameters:
-
-- `client_id`: **Required** - The Google API client ID of your application. Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
-- `tokenStore`: *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
-- Other parameters: *Optional* - All the other parameters are passed to the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
-
-```ts
-const { authProvider, httpClient, gsiParams } = getGoogleAuthProvider({
-  client_id: "my-application-client-id.apps.googleusercontent.com",
-  context: "use",
-  tokenStore: myTokenStore,
-});
-```
-
-**Tip:** The `client_id` parameter became optional if the `GOOGLE_CLIENT_ID` environment variable is set
 
 ### `googleAuthProvider`
 

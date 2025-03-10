@@ -3,7 +3,7 @@
 - Simplify `ra-auth-google` usage
 - Remove `useGoogleAuthProvider` and the `GoogleAuthContext`
 - Make `googleAuthProvider` and `googleHttpClient` callable without any params
-- Destructure `googleAuthProvider` params
+- Simplify `googleAuthProvider` signature
 
 ### Breaking Changes
 

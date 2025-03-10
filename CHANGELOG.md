@@ -34,15 +34,19 @@ import {
 import dataProvider from "./dataProvider";
 
 +const authProvider = googleAuthProvider();
-+const httpClient = googleHttpClient();
++const dataProvider = jsonServerProvider(
++   'http://localhost:3000',
++   googleHttpClient()
++);
+
 
 const App = () => {
 - const { authProvider, gsiParams, httpClient } = useGoogleAuthProvider();
 
-  const dataProvider = jsonServerProvider(
-      'http://localhost:3000',
-      httpClient
-  );
+- const dataProvider = jsonServerProvider(
+-     'http://localhost:3000',
+-     httpClient
+- );
 
   const LoginPage = () => (
     <Login>

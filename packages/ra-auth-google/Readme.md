@@ -362,14 +362,12 @@ import { Admin, Login, Resource } from "react-admin";
 import posts from "./posts";
 
 const authProvider = googleAuthProvider();
-const httpClient = googleHttpClient();
+const dataProvider = jsonServerProvider(
+  "https://jsonplaceholder.typicode.com",
+  googleHttpClient()
+);
 
 const App = () => {
-  const dataProvider = jsonServerProvider(
-    "https://jsonplaceholder.typicode.com",
-    httpClient
-  );
-
   const LoginPage = () => (
     <Login>
       <LoginButton />
@@ -417,14 +415,12 @@ import posts from "./posts";
 import { myTokenStore } from "./myTokenStore";
 
 const authProvider = googleAuthProvider({ tokenStore: myTokenStore });
-const httpClient = googleHttpClient({ tokenStore: myTokenStore });
+const dataProvider = jsonServerProvider(
+  "https://jsonplaceholder.typicode.com",
+  googleHttpClient({ tokenStore: myTokenStore })
+);
 
 const App = () => {
-  const dataProvider = jsonServerProvider(
-    "https://jsonplaceholder.typicode.com",
-    httpClient
-  );
-
   const LoginPage = () => (
     <Login>
       <LoginButton />

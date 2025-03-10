@@ -6,28 +6,38 @@ import { TokenStore, localStorageTokenStore } from './tokenStore';
 /**
  * Returns an authProvider that can be used with react-admin.
  *
- * @param gsiParams **Required** - Parameters for the Google Identity Services library. See the [documentation](https://developers.google.com/identity/gsi/web/reference/js-reference?hl=en#IdConfiguration) for the full list of supported parameters.
- * @param tokenStore *Optional* - The token store to use to store the token. Defaults to `localStorageTokenStore`.
+ * @param client_id *Required* - The Google API client ID of your application.
+ *   Tries to use the `GOOGLE_CLIENT_ID` environment variable if not provided.
+ *   *Optional* if the `GOOGLE_CLIENT_ID` environment variable is set.
+ * @param ux_mode *Optional* - The display mode ('popup' or 'redirect).
+ *   Defaults to `popup`.
+ * @param tokenStore *Optional* - The token store to use to store the token.
+ *  Defaults to `localStorageTokenStore`.
  *
  * @example
  * ```ts
  * const authProvider = googleAuthProvider({
- *   gsiParams: {
- *     client_id: "my-application-client-id.apps.googleusercontent.com",
- *     ux_mode: "popup",
- *   },
+ *   client_id: "my-application-client-id.apps.googleusercontent.com",
+ *   ux_mode: "popup",
  *   tokenStore: myTokenStore,
  * });
  * ```
  */
 export const googleAuthProvider = ({
-    gsiParams,
+    client_id = process.env.GOOGLE_CLIENT_ID,
+    ux_mode = 'popup',
     tokenStore = localStorageTokenStore,
-}: {
-    gsiParams: Omit<IdConfiguration, 'callback'>;
-    tokenStore?: TokenStore;
-}): AuthProvider => {
-    const authProvider = {
+    ...rest
+}: GoogleAuthProviderParams = {}): AuthProvider => {
+    if (!client_id) {
+        throw new Error(
+            'Missing Google Client ID. Pass it as prop or set the GOOGLE_CLIENT_ID env variable.'
+        );
+    }
+
+    const gsiParams = { client_id, ux_mode, ...rest };
+
+    return {
         async login(authResponse: CredentialResponse) {
             const token = authResponse?.credential;
             if (token) {
@@ -91,7 +101,13 @@ export const googleAuthProvider = ({
                 ? JSON.parse(localStorage.getItem('user'))
                 : undefined;
         },
-    };
 
-    return authProvider;
+        gsiParams,
+    };
 };
+
+export interface GoogleAuthProviderParams
+    extends Omit<IdConfiguration, 'callback' | 'client_id'> {
+    client_id?: string;
+    tokenStore?: TokenStore;
+}

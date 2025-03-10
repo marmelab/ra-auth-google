@@ -1,3 +1,75 @@
+## 3.0.0
+
+-   Simplify `ra-auth-google` usage
+-   Remove `useGoogleAuthProvider` and the `GoogleAuthContext`
+-   Make `googleAuthProvider` and `googleHttpClient` callable without any params
+-   Simplify `googleAuthProvider` signature
+
+### Breaking Changes
+
+```diff
+const autProvider = googleAuthProvider({
+-   {
+-     client_id: "my-application-client-id.apps.googleusercontent.com",
+-     ux_mode: "popup",
+-   },
++   client_id: "my-application-client-id.apps.googleusercontent.com",
++   ux_mode: "popup",
+    tokenStore: myTokenStore,
+  });
+```
+
+```diff
+// in src/App.tsx
+import React from "react";
+import { Admin, Resource, Login } from "react-admin";
+import {
+- useGoogleAuthProvider,
++ googleAuthProvider,
++ googleHttpClient,
+  LoginButton,
+  OneTapButton,
+-  GoogleAuthContextProvider
+} from "ra-auth-google";
+import dataProvider from "./dataProvider";
+
++const authProvider = googleAuthProvider();
++const dataProvider = jsonServerProvider(
++   'http://localhost:3000',
++   googleHttpClient()
++);
+
+
+const App = () => {
+- const { authProvider, gsiParams, httpClient } = useGoogleAuthProvider();
+
+- const dataProvider = jsonServerProvider(
+-     'http://localhost:3000',
+-     httpClient
+- );
+
+  const LoginPage = () => (
+    <Login>
+      <LoginButton />
+    </Login>
+  );
+
+  return (
+-   <GoogleAuthContextProvider value={gsiParams}>
+      <Admin
+        authProvider={authProvider}
+        dataProvider={dataProvider}
+        title="Example Admin"
+        loginPage={LoginPage}
+      >
+        // ...
+      </Admin>
+-   </GoogleAuthContextProvider>
+  );
+};
+export default App;
+```
+
 ## 2.0.0
 
 -   Upgrade `react-admin` to v5
@@ -65,4 +137,4 @@ Both components now expect to be rendered inside a `<GoogleAuthContextProvider>`
 
 ## 1.0.0
 
-* Initial release
+-   Initial release

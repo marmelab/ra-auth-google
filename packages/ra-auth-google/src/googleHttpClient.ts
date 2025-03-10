@@ -14,7 +14,7 @@ export const googleHttpClient = ({
     tokenStore = localStorageTokenStore,
 }: {
     tokenStore?: TokenStore;
-}) => async (url: string, options: Options = {}) => {
+} = {}) => async (url: string, options: Options = {}) => {
     const token = tokenStore.getToken();
     const user = {
         authenticated: !!token,

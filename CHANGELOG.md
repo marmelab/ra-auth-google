@@ -1,3 +1,15 @@
+## Unreleased
+
+- Publish modern ESM and CommonJS package exports ([#5](https://github.com/marmelab/ra-auth-google/pull/5))
+
+### Breaking Changes
+
+`ra-auth-google` now publishes its ES modules and CommonJS builds in `dist/`, behind an [`exports`](https://nodejs.org/api/packages.html#package-entry-points) map. Only the package root can be imported, so these undocumented paths no longer resolve:
+
+- the old build folders: `ra-auth-google/lib/*` and `ra-auth-google/esm/*`
+- the sources: `ra-auth-google/src/*`, even though they are still published
+- the manifest: `ra-auth-google/package.json`
+
 ## 3.0.0
 
 -   Simplify `ra-auth-google` usage

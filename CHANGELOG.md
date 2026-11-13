@@ -1,6 +1,7 @@
 ## 4.0.0
 
 - Publish modern ESM and CommonJS package exports ([#5](https://github.com/marmelab/ra-auth-google/pull/5))
+- Target ES2020 instead of ES5 ([#5](https://github.com/marmelab/ra-auth-google/pull/5))
 
 ### Breaking Changes
 
@@ -9,6 +10,8 @@
 - the old build folders: `ra-auth-google/lib/*` and `ra-auth-google/esm/*`
 - the sources: `ra-auth-google/src/*`, even though they are still published
 - the manifest: `ra-auth-google/package.json`
+
+The published code now targets ES2020 instead of ES5. If your app supports older browsers, transpile `ra-auth-google` with your bundler.
 
 ## 3.0.0
 

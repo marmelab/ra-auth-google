@@ -1,4 +1,4 @@
-## Unreleased
+## 4.0.0
 
 - Publish modern ESM and CommonJS package exports ([#5](https://github.com/marmelab/ra-auth-google/pull/5))
 
